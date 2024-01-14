@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Question "{{ question.titre }}"{% endblock %}
+
+{% block body %}
+    <ul class="list-group">
+        <li class="list-group-item p-3">
+            <h3>{{ question.titre }}</h3>
+            {% if question.contenu %}
+                <p>{{ question.contenu }}</p>
+            {% endif %}
+            <small class="text-secondary">
+                <img
+                        src="{{ asset(question.user.avatar) }}"
+                        alt="{{ question.user.nom }}"
+                        class="rounded-circle"
+                        style="width: 25px"
+                >
+                {{ question.user.nom }} a posé une question
+                le {{ question.dateCreation|date('d.m.Y') }}
+            </small>
+        </li>
+    </ul>
+
+    <ul class="list-group pt-5">
+        {% for reponse in question.reponses %}
+            <li class="list-group-item p-3 {{ reponse.user.id is same as(question.user.id) ? 'border border-2 border-danger' : '' }}">
+                {# Affiche un badge si la réponse est celle de l'auteur de la question #}
+                {% if reponse.user.id is same as(question.user.id) %}
+                    <span class="badge rounded-pill text-bg-danger mb-2">
+                            Réponse de l'auteur
+                        </span>
+                {% endif %}
+                <p>{{ reponse.contenu }}</p>
+                <small class="text-secondary">
+                    <img
+                            src="{{ asset(reponse.user.avatar) }}"
+                            alt="{{ reponse.user.nom }}"
+                            class="rounded-circle"
+                            style="width: 25px"
+                    >
+                    {{ reponse.user.nom }} a posté une réponse
+                    le {{ reponse.dateCreation|date('d.m.Y') }}
+                </small>
+            </li>
+        {% else %}
+            <p>Aucune réponse pour le moment</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

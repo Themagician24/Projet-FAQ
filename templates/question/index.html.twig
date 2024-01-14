@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    {% for messageFlash in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ messageFlash }}
+        </div>
+    {% endfor %}
+
+    <ul class="list-group">
+        {% for question in questions %}
+            <li class="list-group-item p-3">
+                <h5>
+                    <a href="{{ path('app_question_reponses', { id: question.id }) }}">
+                        {{ question.titre }}
+                    </a>
+                </h5>
+                {% if question.contenu %}
+                    <p>{{ question.contenu|slice(0, 50) }}...</p>
+                {% endif %}
+                <small class="text-secondary">
+                    <img
+                            src="{{ asset(question.user.avatar) }}"
+                            alt="{{ question.user.nom }}"
+                            class="rounded-circle"
+                            style="width: 25px"
+                    >
+                    {{ question.user.nom }} a posé une question
+                    le {{ question.dateCreation|date('d.m.Y') }}
+                </small>
+            </li>
+        {% else %}
+            <p>Aucune question pour le moment</p>
+        {% endfor %}
+    </ul>
+{% endblock %}
